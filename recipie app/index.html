@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Light theme */
+        .light {
+            --bg-color: #edf2f7;
+            --text-color: #2d3748;
+            --card-bg: #ffffff;
+            --input-bg: #f7fafc;
+            --input-text: #2d3748;
+            --button-bg: #38a169;
+            --button-hover-bg: #2f855a;
+        }
+
+        /* Dark theme */
+        .dark {
+            --bg-color: #1a202c;
+            --text-color: #f7fafc;
+            --card-bg: #2d3748;
+            --input-bg: #4a5568;
+            --input-text: #f7fafc;
+            --button-bg: #48bb78;
+            --button-hover-bg: #38a169;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+        }
+
+        input, select {
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border-color: var(--input-bg);
+        }
+
+        button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+        }
+
+        button:hover {
+            background-color: var(--button-hover-bg);
+        }
+    </style>
+</head>
+<body class="light">
+    <div class="w-full p-3">
+        <div class="max-w-4xl mx-auto p-8 fade-in">
+            <!-- Theme toggle button -->
+            <div class="flex justify-end mb-4">
+                <button id="themeToggle" class="px-4 py-2 rounded-md hover-scale">
+                    Switch to Dark Mode
+                </button>
+            </div>
+            <h1 class="text-3xl text-center font-bold text-4xl uppercase mb-4">Recipe Finder</h1>
+
+            <!-- Search -->
+            <div class="items-center justify-between flex self-center mt-3 rounded-md shadow-md">
+                <input type="text" name="" id="searchRecipe" 
+                    class="w-full h-10 rounded-tl-md rounded-bl-md pl-3 outline-none" 
+                    placeholder="Search the recipe or food item" onkeyup="filterRecipe()">
+                <button class="py-2 px-6 rounded-md hover-scale" onclick="filterRecipe()">Search</button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="flex mb-6 mt-3">
+                <select id="filterType" onchange="filterRecipe()" class="p-2 rounded-md border w-full sm:w-auto">
+                    <option value="">All Recipes</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                </select>
+            </div>
+
+            <!-- Results -->
+            <div id="recipeResults" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-2"></div>
+        </div>
+    </div>
+    <script>
+        // Recipes Data with fixed image URLs
+        const recipes = [
+            {
+                name: "Blueberry Pancakes",
+                ingredients: ["blueberries", "flour", "eggs", "milk"],
+                type: "Breakfast",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkoG4b2B0aIiKiX8kdvUFsV5PI0rqL6CCn8g&s"
+            },
+            {
+                name: "Caprese Salad",
+                ingredients: ["mozzarella", "tomat oes", "basil", "olive oil"],
+                type: "Lunch",
+                img: "https://hips.hearstapps.com/hmg-prod/images/caprese-salad-recipe-2-664ceea357d6f.jpg?crop=0.8888888888888888xw:1xh;center,top&resize=1200:"
+            },
+            {
+                name: "Chicken Alfredo Pasta",
+                ingredients: ["fettuccine", "chicken", "parmesan", "cream"],
+                type: "Dinner",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs2paowiODEqEOJ082fLEWgrlBjvBlGd2GrQ&s"
+            },
+            {
+                name: "Avocado Toast",
+                ingredients: ["avocado", "bread", "lemon", "pepper"],
+                type: "Breakfast",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc9AIvAc6dkD5GTVhVASi91F4Jc4n7AbOFhw&s"
+            },
+            {
+                name: "Grilled Cheese Sandwich",
+                ingredients: ["bread", "cheese", "butter"],
+                type: "Lunch",
+                img: "https://creativescookery.com/wp-content/uploads/2024/04/Ground-Beef-Grilled-Cheese-Sandwich-1.webp"
+            },
+            {
+                name: "Beef Steak",
+                ingredients: ["beef", "garlic", "butter", "herbs"],
+                type: "Dinner",
+                img: "https://i.ytimg.com/vi/nsw0Px-Pho8/maxresdefault.jpg"
+            }
+        ];
+
+        // Load recipes into container
+        function loadRecipe(filteredRecipes) {
+            const recipeContainer = document.getElementById("recipeResults");
+            recipeContainer.innerHTML = ""; // Clear previous results
+            filteredRecipes.length ? filteredRecipes.forEach(recipe => {
+                const res = `
+                    <div class="card p-4 rounded-lg shadow-lg fade-in hover-scale">
+                        <img src="${recipe.img}" alt="${recipe.name}" class="w-full h-40 object-cover mb-4 rounded-lg" />
+                        <h3 class="text-xl font-semibold mb-2">${recipe.name}</h3>
+                        <p class="mb-4">Ingredients: ${recipe.ingredients.join(", ")}</p>
+                        <span class="text-sm">Type: ${recipe.type}</span>
+                    </div>`;
+                recipeContainer.innerHTML += res;
+            }) : recipeContainer.innerHTML = `<p class="text-center">No recipes found.</p>`;
+        }
+
+        // Filter recipes
+        function filterRecipe() {
+            const foodSearch = document.getElementById("searchRecipe").value.toLowerCase();
+            const filterType = document.getElementById("filterType").value;
+            const filteredRecipes = recipes.filter(recipe =>
+                recipe.name.toLowerCase().includes(foodSearch) &&
+                (!filterType || recipe.type.toLowerCase() === filterType.toLowerCase())
+            );
+            loadRecipe(filteredRecipes);
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", () => {
+            const isDark = document.body.classList.contains("dark");
+            document.body.classList.toggle("dark", !isDark);
+            document.body.classList.toggle("light", isDark);
+            themeToggle.textContent = isDark ? "Switch to Dark Mode" : "Switch to Light Mode";
+        });
+
+        // Initialize recipes
+        filterRecipe();
+    </script>
+</body>
+</html>

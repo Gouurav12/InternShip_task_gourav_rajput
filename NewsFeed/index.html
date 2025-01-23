@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adaptive News Feed</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+</head>
+<body>
+    <link rel="stylesheet" href="style.css">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-12 text-gray-200">Adaptive News Feed</h1>
+        
+        <div class="max-w-2xl mx-auto mb-12 form-container p-6 space-y-4">
+            <form id="newsForm">
+                <div>
+                    <label class="block mb-2 text-gray-700">Article Title</label>
+                    <input type="text" id="title" class="form-input w-full p-3 rounded" placeholder="Enter title" required>
+                </div>
+                <div>
+                    <label class="block mb-2 text-gray-700">Description</label>
+                    <textarea id="description" class="form-input w-full p-3 rounded" rows="4" placeholder="Article description" required></textarea>
+                </div>
+                <div>
+                    <label class="block mb-2 text-gray-700">Image URL</label>
+                    <input type="url" id="imgUrl" class="form-input w-full p-3 rounded" placeholder="Paste image URL" required>
+                </div>
+                <button type="submit" class="btn-submit w-full py-3 rounded">
+                    Add News Article
+                </button>
+            </form>
+        </div>
+        
+        <div id="newsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic news articles -->
+        </div>
+        
+        <nav class="mt-8 flex justify-center space-x-2">
+            <a href="#" onclick="changePage(-1)" class="pagination-btn px-4 py-2 rounded">Previous</a>
+            <a href="#" onclick="goToPage(1)" class="pagination-btn px-4 py-2 rounded">1</a>
+            <a href="#" onclick="goToPage(2)" class="pagination-btn px-4 py-2 rounded">2</a>
+            <a href="#" onclick="changePage(1)" class="pagination-btn px-4 py-2 rounded">Next</a>
+        </nav>
+    </div>
+
+    <!-- <script>
+        let currentPage = 1;
+        let NewsArticle = [
+        {
+            Title: "AI in Healthcare Revolution",
+            Description: "Advanced AI technologies transforming medical diagnostics and patient care.",
+            imgURL: "https://www.mindinventory.com/blog/wp-content/uploads/2023/10/ai-in-healthcare-industry.webp"
+            },
+            {
+                Title: "Climate Change Solutions",
+                Description: "Global strategies for reducing carbon emissions and promoting sustainability.",
+                imgURL: "https://images.unsplash.com/photo-1516321497487-e288fb19713f"
+                },
+                {
+                    Title: "Space Exploration Frontier",
+                    Description: "Breakthrough discoveries in deep space exploration and cosmic research.",
+                    imgURL: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4"
+                    },
+                    {
+                        Title: "Renewable Energy Tech",
+                        Description: "Innovative technologies making sustainable energy more accessible.",
+                        imgURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJS849dEWrvrFWPOAWJCzIDRQFCm7MVQ8Yjw&s"
+                        },
+                        {
+                            Title: "Digital Learning Revolution",
+                            Description: "Transformative digital platforms reshaping global education.",
+                            imgURL: "https://img.freepik.com/premium-photo/digital-learning-revolution-empowering-education-throu-4xjpg_835197-13497.jpg"
+                            },
+                            {
+                                Title: "Future Tech Landscape",
+                                Description: "Emerging technologies set to transform everyday life.",
+                                imgURL: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
+                                }
+                                ];
+                                
+                                function loadNewsFeed() {
+                                    const container = document.getElementById("newsContainer");
+                                    container.innerHTML = "";
+                                    
+                                    const startIndex = (currentPage - 1) * 6;
+                                    const endIndex = startIndex + 6;
+                                    const pageArticles = NewsArticle.slice(startIndex, endIndex);
+                                    
+                                    pageArticles.forEach(article => {
+                                        const newsItem = `
+                                        <div class="card transform transition-all duration-300 hover:-translate-y-2">
+                                            <img src="${article.imgURL}" alt="${article.Title}" class="card-image w-full">
+                                            <div class="p-4">
+                                                <h3 class="text-xl font-bold mb-2 text-gray-200">${article.Title}</h3>
+                            <p class="text-gray-400">${article.Description}</p>
+                        </div>
+                    </div>
+                    `;
+                    container.innerHTML += newsItem;
+                    });
+                    }
+                    
+                    document.getElementById("newsForm").addEventListener("submit", function(event) {
+                        event.preventDefault();
+                        const Title = document.getElementById("title").value;
+                        const Description = document.getElementById("description").value;
+                        const imgURL = document.getElementById("imgUrl").value;
+                        
+            NewsArticle.push({ Title, Description, imgURL });
+            this.reset();
+            loadNewsFeed();
+            });
+            
+            function changePage(delta) {
+                currentPage = Math.max(1, Math.min(Math.ceil(NewsArticle.length / 6), currentPage + delta));
+                loadNewsFeed();
+                }
+                
+                function goToPage(page) {
+                    currentPage = page;
+                    loadNewsFeed();
+                    }
+                    
+                    window.onload = loadNewsFeed;
+                </script> -->
+            </body>
+            </html>
+            <script src="script.js"></script>

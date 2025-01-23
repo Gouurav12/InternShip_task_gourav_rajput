@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TODO APP </h1>
+            <span class="theme-toggle-btn" id="themeToggleBtn"><i class="fas fa-sun"></i></span>
+        </div>
+
+        <div class="todo-input-group">
+            <input type="text" class="todo-input" id="todoInput" placeholder="Add a new task...">
+            <button class="btn btn-primary" id="addTodoBtn">Add Task</button>
+        </div>
+
+        <div class="search-group">
+            <input type="text" class="todo-input" id="searchInput" placeholder="Search tasks...">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+
+        <ul class="todo-list" id="todoList"></ul>
+    </div>
+
+   
+    <script src="script.js"></script>
+
+</body>
+</html>
